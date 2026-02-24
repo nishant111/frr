@@ -4126,7 +4126,8 @@ void bgp_process_main_one(struct bgp *bgp, struct bgp_dest *dest, afi_t afi, saf
 	    !CHECK_FLAG(dest->flags, BGP_NODE_USER_CLEAR) &&
 	    !CHECK_FLAG(dest->flags, BGP_NODE_PROCESS_CLEAR) &&
 	    !CHECK_FLAG(old_select->flags, BGP_PATH_ATTR_CHANGED) &&
-	    !bgp_addpath_is_addpath_used(&bgp->tx_addpath, afi, safi)) {
+	    !bgp_addpath_is_addpath_used(&bgp->tx_addpath, afi, safi) &&
+	    (!BGP_SUPPRESS_FIB_ENABLED(bgp) || CHECK_FLAG(dest->flags, BGP_NODE_FIB_INSTALLED))) {
 		if (bgp_zebra_has_route_changed(old_select)) {
 #ifdef ENABLE_BGP_VNC
 			vnc_import_bgp_add_route(bgp, p, old_select);
